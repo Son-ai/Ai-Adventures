@@ -1,0 +1,30 @@
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 28px;
+  background: linear-gradient(rgba(20, 18, 43, 0.85), transparent);
+}
+
+.brand {
+  font-family: var(--font-display), serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 0 #0d0b1e;
+}
+
+.nav { display: flex; gap: 24px; font-size: 1.25rem; }
+.nav a { padding: 4px 2px; border-bottom: 2px solid transparent; }
+.nav a:hover { border-color: #3fd0c9; }
+.nav a[aria-current="page"] { border-color: #f2b25c; }
+
+.brand:focus-visible,
+.nav a:focus-visible { outline: 3px solid #3fd0c9; outline-offset: 3px; border-radius: 4px; }

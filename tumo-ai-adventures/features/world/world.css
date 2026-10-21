@@ -1,0 +1,101 @@
+.world {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 96px 24px 140px;
+  text-align: center;
+  background: #14122b;
+  color: #f6efe3;
+  font-family: var(--font-body), Georgia, serif;
+}
+
+.world-scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+.fireflies { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+
+.world__content { position: relative; z-index: 2; max-width: 720px; }
+.world__content::before {
+  content: "";
+  position: absolute;
+  inset: -60px -80px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(20, 18, 43, 0.7), transparent);
+}
+
+.world__title {
+  margin: 0 0 16px;
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-shadow: 0 3px 0 #0d0b1e, 0 0 40px rgba(63, 208, 201, 0.35);
+}
+.world__lead {
+  margin: 0 auto 32px;
+  max-width: 34ch;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: #e4daf0;
+}
+
+/* Delete this block if .start-button is already styled in globals.css */
+.world .start-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 14px 28px;
+  font-family: var(--font-display), serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: #0d0b1e;
+  background: #f2b25c;
+  border: 2.5px solid #0d0b1e;
+  border-radius: 999px;
+  box-shadow: 0 5px 0 #0d0b1e, 0 0 36px rgba(242, 178, 92, 0.35);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.world .start-button:hover { transform: translateY(-2px); }
+.world .start-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #0d0b1e; }
+.world .start-button:focus-visible { outline: 3px solid #3fd0c9; outline-offset: 4px; }
+
+/* scene animation */
+.stars circle { animation: tw 4s ease-in-out infinite; }
+.lamp { animation: bob 6s ease-in-out infinite; }
+.shroom { animation: pulse 5s ease-in-out infinite; }
+.sway { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 6s ease-in-out infinite alternate; }
+.hang { transform-box: fill-box; transform-origin: 50% 0; animation: sway 8s ease-in-out infinite alternate; }
+@keyframes tw { 50% { opacity: 0.25; } }
+@keyframes bob { 50% { transform: translateY(-10px); } }
+@keyframes pulse { 50% { opacity: 0.6; } }
+@keyframes sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+
+.firefly {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f5e7a1;
+  box-shadow: 0 0 10px 3px rgba(245, 231, 161, 0.65);
+  animation: drift var(--dur) ease-in-out infinite alternate, blink 3s ease-in-out infinite;
+}
+@keyframes drift { to { transform: translate(28px, -36px); } }
+@keyframes blink { 50% { opacity: 0.25; } }
+
+/* butterflies */
+.butterflies { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.butterfly { position: absolute; left: 0; top: 0; will-change: transform; }
+.butterfly svg { display: block; overflow: visible; filter: drop-shadow(0 0 8px var(--c)); }
+.wing-l, .wing-r { transform-box: fill-box; animation: flap 0.5s ease-in-out infinite alternate; }
+.wing-l { transform-origin: 100% 50%; }
+.wing-r { transform-origin: 100% 50%; }
+@keyframes flap { from { transform: scaleX(1); } to { transform: scaleX(0.25); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .world *, .world *::before { animation: none !important; }
+}
