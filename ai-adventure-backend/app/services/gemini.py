@@ -1,60 +1,61 @@
+import json
 import os
 
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
+
+from app.schemas import StoryRequest
 
 load_dotenv()
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
+
+SYSTEM_PROMPT = """
+You are a master storyteller who writes adventure stories that feel like real books.
+
+- Write in a warm, vivid storytelling voice with sensory details.
+- Give the hero a personality, a clear goal and real obstacles.
+- Include dialogue and one surprising but logical twist.
+- End with a satisfying, earned ending.
+- Keep it original, age-appropriate, with no graphic violence.
+- Do not create reader choices or branching paths.
+"""
 
 
-def generate_story(
-    theme: str,
-    genre: str,
-    style: str,
-    description: str,
-    steps: int,
-):
+def generate_story(story: StoryRequest) -> dict:
     prompt = f"""
-    Create an interactive adventure story.
+    Write a complete, original adventure story.
 
-    Theme: {theme}
-    Genre: {genre}
-    Style: {style}
-    Description: {description}
-    Number of scenes: {steps}
-
-    The story should be magical, creative,
-    and suitable for teenagers.
-
-    Return ONLY valid JSON in this structure:
-
-    {{
-        "title": "Story title",
-        "scenes": [
-            {{
-                "text": "Story scene text",
-                "choices": [
-                    "First choice",
-                    "Second choice",
-                    "Third choice"
-                ]
-            }}
-        ]
-    }}
+    Main character: {story.character_name}
+    World: {story.world}
+    Genre: {story.genre}
+    Style: {story.style}
+    Opening scene: {story.description}
+    Number of pages: {story.steps}
 
     Rules:
-    - Create exactly {steps} scenes.
-    - Each scene should have 2 or 3 choices.
-    - Make the story coherent.
+    - Create exactly {story.steps} pages.
+    - Each page has 5 to 7 rich sentences and a meaningful event.
+    - The story has a beginning, a middle and an ending.
+    - Write in English.
     - Return only JSON.
+
+    JSON format:
+    {{
+        "title": "A creative story title",
+        "pages": ["First page...", "Second page...", "Third page..."]
+    }}
     """
 
-    response = client.interactions.create(
-        model="gemini-3.5-flash-lite",
-        input=prompt,
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            system_instruction=SYSTEM_PROMPT,
+            response_mime_type="application/json",
+        ),
     )
 
-    return response.output_text
+    return json.loads(response.text)

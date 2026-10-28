@@ -1,30 +1,29 @@
-.world {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
+/* the world behind every page */
+.world-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #14122b; }
+.world-scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fireflies { position: absolute; inset: 0; pointer-events: none; }
+.butterflies { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.butterfly { position: absolute; left: 0; top: 0; will-change: transform; }
+.butterfly svg { display: block; overflow: visible; filter: drop-shadow(0 0 8px var(--c)); }
+
+/* every page is one screen tall, content centered */
+.page {
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 96px 24px 140px;
+  padding: 88px 24px 28px;
   text-align: center;
-  background: #14122b;
-  color: #f6efe3;
-  font-family: var(--font-body), Georgia, serif;
 }
-
-.world-scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
-.fireflies { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-
-.world__content { position: relative; z-index: 2; max-width: 720px; }
-.world__content::before {
+.page--home { padding-bottom: 150px; }
+.page__content { position: relative; max-width: 720px; }
+.page__content::before {
   content: "";
   position: absolute;
   inset: -60px -80px;
   z-index: -1;
   background: radial-gradient(closest-side, rgba(20, 18, 43, 0.7), transparent);
 }
-
-.world__title {
+.page__title {
   margin: 0 0 16px;
   font-family: var(--font-display), serif;
   font-weight: 700;
@@ -33,7 +32,7 @@
   letter-spacing: 0.04em;
   text-shadow: 0 3px 0 #0d0b1e, 0 0 40px rgba(63, 208, 201, 0.35);
 }
-.world__lead {
+.page__lead {
   margin: 0 auto 32px;
   max-width: 34ch;
   font-size: clamp(1.25rem, 2.4vw, 1.6rem);
@@ -42,8 +41,16 @@
   color: #e4daf0;
 }
 
-/* Delete this block if .start-button is already styled in globals.css */
-.world .start-button {
+/* glass card (used later by the form, library, reader) */
+.card {
+  background: rgba(20, 18, 43, 0.82);
+  border: 2.5px solid #0d0b1e;
+  border-radius: 22px;
+  box-shadow: 0 6px 0 #0d0b1e, 0 0 50px rgba(63, 208, 201, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.start-button {
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
@@ -52,17 +59,18 @@
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.06em;
-  text-decoration: none;
   color: #0d0b1e;
   background: #f2b25c;
   border: 2.5px solid #0d0b1e;
   border-radius: 999px;
   box-shadow: 0 5px 0 #0d0b1e, 0 0 36px rgba(242, 178, 92, 0.35);
+  cursor: pointer;
   transition: transform 0.12s, box-shadow 0.12s;
 }
-.world .start-button:hover { transform: translateY(-2px); }
-.world .start-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #0d0b1e; }
-.world .start-button:focus-visible { outline: 3px solid #3fd0c9; outline-offset: 4px; }
+.start-button:hover { transform: translateY(-2px); }
+.start-button:active { transform: translateY(4px); box-shadow: 0 1px 0 #0d0b1e; }
+.start-button:focus-visible { outline: 3px solid #3fd0c9; outline-offset: 4px; }
+.start-button:disabled { opacity: 0.7; cursor: wait; }
 
 /* scene animation */
 .stars circle { animation: tw 4s ease-in-out infinite; }
@@ -87,15 +95,9 @@
 @keyframes drift { to { transform: translate(28px, -36px); } }
 @keyframes blink { 50% { opacity: 0.25; } }
 
-/* butterflies */
-.butterflies { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-.butterfly { position: absolute; left: 0; top: 0; will-change: transform; }
-.butterfly svg { display: block; overflow: visible; filter: drop-shadow(0 0 8px var(--c)); }
-.wing-l, .wing-r { transform-box: fill-box; animation: flap 0.5s ease-in-out infinite alternate; }
-.wing-l { transform-origin: 100% 50%; }
-.wing-r { transform-origin: 100% 50%; }
+.wing-l, .wing-r { transform-box: fill-box; transform-origin: 100% 50%; animation: flap 0.5s ease-in-out infinite alternate; }
 @keyframes flap { from { transform: scaleX(1); } to { transform: scaleX(0.25); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .world *, .world *::before { animation: none !important; }
+  .world-bg *, .world-bg *::before { animation: none !important; }
 }

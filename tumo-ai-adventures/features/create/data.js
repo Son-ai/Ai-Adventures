@@ -1,9 +1,9 @@
 export const worlds = [
-  "Floating Kingdom",
-  "Whispering Woods",
-  "Underwater City",
-  "Candy Land",
-  "Snowy Mountains",
+  "Moonlit Forest",
+  "Glowing Mushroom Grove",
+  "Butterfly Valley",
+  "Lantern Hills",
+  "Twilight Marsh",
 ];
 
 export const genres = [
@@ -14,3 +14,5 @@ export const genres = [
   "Sci-Fi",
   "Heartwarming",
 ];
+
+export const styles = ["Magical", "Dark", "Funny", "Heartwarming"];
